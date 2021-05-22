@@ -41,6 +41,7 @@ namespace API
                 options.UseSqlite(_config.GetConnectionString("DefaultConnection"));
             });
             services.AddControllers();
+            services.AddCors();
 
             // Commenting the following code to stop the Swagger Generation
             services.AddSwaggerGen(c =>
@@ -60,9 +61,9 @@ namespace API
             }
 
             app.UseHttpsRedirection();
-
+            app.UseCors(policy => policy.AllowAnyHeader().AllowAnyMethod().WithOrigins("https://localhost:4200"));
             app.UseRouting();
-
+            
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
