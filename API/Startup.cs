@@ -13,7 +13,12 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
-
+using API.Interfaces;
+using API.Services;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
+using API.Extensions;
 namespace API
 {
     public class Startup
@@ -36,13 +41,13 @@ namespace API
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<DataContext>(options =>
-            {
-                options.UseSqlite(_config.GetConnectionString("DefaultConnection"));
-            });
+            // Code from here is Moved to ApplicationServiceExtensions.cs file(This is Extension files)
+            // Extension Methods are created to keep the Startup.cs class clean and easy to understand
+            services.AddApplicationServices(_config); // Extension Method
+
             services.AddControllers();
             services.AddCors();
-
+            services.AddIdentityServices(_config); // Extension Method for Authentication
             // Commenting the following code to stop the Swagger Generation
             services.AddSwaggerGen(c =>
             {
@@ -53,6 +58,7 @@ namespace API
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            // In below section ordering of the different setting is very important
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -63,7 +69,7 @@ namespace API
             app.UseHttpsRedirection();
             app.UseCors(policy => policy.AllowAnyHeader().AllowAnyMethod().WithOrigins("https://localhost:4200"));
             app.UseRouting();
-            
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
