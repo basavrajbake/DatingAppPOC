@@ -16,5 +16,12 @@
       "es2018",
       "dom"
     ]
-  }
+  },
+  "angularCompilerOptions": {
+    //"strictTemplates": true,
+   // "preserveWhitespaces": true,
+    //"enableIvy":false,
+    //"skipTemplateCodegen": true,
+   // "strictMetadataEmit": true
+  },
 }

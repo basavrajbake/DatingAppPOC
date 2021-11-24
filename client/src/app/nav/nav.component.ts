@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { Observable } from 'rxjs';
-import { User } from '../_models/user';
+import { Router } from '@angular/router';
+import { ToastrService } from 'ngx-toastr';
 import { AccountService } from '../_services/account.service';
 
 @Component({
@@ -10,26 +10,31 @@ import { AccountService } from '../_services/account.service';
 })
 export class NavComponent implements OnInit {
   model: any = {};
-  currentUser: string;
-  constructor(public accountService: AccountService) { }
+ // currentUser: string;
+  constructor(public accountService: AccountService, private router: Router,
+    private toastr: ToastrService) { }
 
   ngOnInit(): void {
     //this.getCurrentUser();
-    this.currentUser = JSON.parse(localStorage.getItem("user"))?.userName;
+    //this.currentUser = JSON.parse(localStorage.getItem("user"))?.userName;
   }
   login() {
     this.accountService.login(this.model).subscribe(response => {
-      console.log(response);
-      this.currentUser = JSON.parse(localStorage.getItem("user")).userName;
-    }, error => console.log(error));
+      this.router.navigateByUrl('/members');
+      //this.currentUser = JSON.parse(localStorage.getItem("user")).userName;
+    }, error => {
+      console.log(error);
+      this.toastr.error(error.error);
+    });
   }
   logout() {
     this.accountService.logout();
-    this.currentUser = null;
+    //this.currentUser = null;
+    this.router.navigateByUrl('/');
   }
   getCurrentUser() {
     this.accountService.currentUser$.subscribe(user => {
-      this.currentUser = user.userName;
+      //this.currentUser = user.userName;
     }, error => {
       console.log(error);
     })
