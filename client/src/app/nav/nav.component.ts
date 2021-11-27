@@ -22,9 +22,6 @@ export class NavComponent implements OnInit {
     this.accountService.login(this.model).subscribe(response => {
       this.router.navigateByUrl('/members');
       //this.currentUser = JSON.parse(localStorage.getItem("user")).userName;
-    }, error => {
-      console.log(error);
-      this.toastr.error(error.error);
     });
   }
   logout() {
