@@ -4,6 +4,7 @@ using API.Interfaces;
 using API.Services;
 using Microsoft.EntityFrameworkCore;
 using API.Data;
+using API.Helpers;
 
 namespace API.Extensions
 {
@@ -26,11 +27,13 @@ namespace API.Extensions
 
                            Question: Do we really need the Interface(ITokenService)?
                            Ans: No, We Don't. We just create the TokenService, it will function as it is
-                           Reason why to specify the Interface : Testing. For easy to mack an interface.
+                           Reason why to specify the Interface : Testing. For easy to mock an interface.
                         */
 
             // Like this is useful for Mock testing of interface
             services.AddScoped<ITokenService, TokenService>();
+            services.AddScoped<IUserRepository,UserRepository>();
+            services.AddAutoMapper(typeof(AutoMapperProfiles).Assembly);
             // if testing is not considered then below will work fine.
             // services.AddScoped<TokenService>();
             services.AddDbContext<DataContext>(options =>
