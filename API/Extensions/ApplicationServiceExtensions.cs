@@ -31,8 +31,10 @@ namespace API.Extensions
                         */
 
             // Like this is useful for Mock testing of interface
+            services.Configure<CloudinarySettings>(config.GetSection("CloudinarySettings"));
             services.AddScoped<ITokenService, TokenService>();
-            services.AddScoped<IUserRepository,UserRepository>();
+            services.AddScoped<IPhotoService, PhotoService>();
+            services.AddScoped<IUserRepository, UserRepository>();
             services.AddAutoMapper(typeof(AutoMapperProfiles).Assembly);
             // if testing is not considered then below will work fine.
             // services.AddScoped<TokenService>();
